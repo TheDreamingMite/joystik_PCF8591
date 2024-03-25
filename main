@@ -1,34 +1,26 @@
 import smbus
 import time
 
-# Адрес устройства PCF8591 на шине I2C
+
 PCF8591_ADDRESS = 0x48
 
-# Номеры аналоговых входов на PCF8591
-ANALOG_CHANNEL_X = 0  # для примера, можете заменить на нужный канал
-ANALOG_CHANNEL_Y = 1  # для примера, можете заменить на нужный канал
 
-# Создаем объект для работы с шиной I2C
-bus = smbus.SMBus(1)  # 1 - это номер шины I2C на Orange Pi PC2
+ANALOG_CHANNEL_X = 0  
+ANALOG_CHANNEL_Y = 1
+
+bus = smbus.SMBus(1)
 
 def read_analog(channel):
-    # Отправляем команду на PCF8591 для выбора аналогового канала
     bus.write_byte(PCF8591_ADDRESS, 0x40 | channel)
-    # Ждем немного для завершения преобразования
     time.sleep(0.1)
-    # Считываем данные с выбранного аналогового канала
     value = bus.read_byte(PCF8591_ADDRESS)
     return value
 
 try:
     while True:
-        # Считываем значения с аналоговых каналов X и Y
         x_value = read_analog(ANALOG_CHANNEL_X)
         y_value = read_analog(ANALOG_CHANNEL_Y)
-        # Выводим полученные значения
         print("X:", x_value, "Y:", y_value)
-        # Ждем немного перед следующим чтением
         time.sleep(0.5)
 except KeyboardInterrupt:
-    # Выход из программы при нажатии Ctrl+C
-    print("Программа завершена.")
+    print("programm stop")
